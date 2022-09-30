@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for , flash, request, redirect
+from flask import Flask, render_template, url_for , flash, request, redirect, session
 from psycopg2 import connect
 from config import *
 from flask_wtf.csrf import CSRFProtect
@@ -11,6 +11,9 @@ app.secret_key='12345'
 
 con_db = EstablecerConexion()
 
+
+
+
 #rutas de la pagina principal
 @app.route("/")
 def index():
@@ -18,6 +21,7 @@ def index():
     sql= "SELECT*FROM atractivos"
     cursor.execute(sql)
     atractivosRegistradas=cursor.fetchall()
+    print("inicio de la página")
     return render_template('index.html',atractivos=atractivosRegistradas)
 
 @app.route("/contacto")
@@ -61,70 +65,101 @@ def registrarse():
 	if request.method == 'POST':
 		nombre = request.form['nombre']
 		correo = request.form['correo']
-		contraseña = request.form['contraseña']
-		create_table_registro()
-		cur = con_db.cursor()
-		cur.execute("INSERT INTO registros (nombre, correo, contraseña) VALUES (%s, %s, %s)", (nombre, correo, contraseña))
-		con_db.commit()
-		flash("registro de usuarios")
-		return redirect(url_for('registro'))
+		contraseña1 = request.form['contraseña1']
+		contraseña2 = request.form['contraseña2']
+		if (contraseña1==contraseña2):
+			create_table_registro()
+			cur = con_db.cursor()
+			cur.execute("INSERT INTO registros (nombre, correo, contraseña) VALUES (%s, %s, %s)", (nombre, correo, contraseña1))
+			con_db.commit()
+			flash("registro de usuarios")
+			return redirect(url_for('registro'))
+  		
+		else:
+			flash("Las contraseñas no coinciden")
+			return redirect(url_for('registro'))
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        # print(request.form['username'])
-        # print(request.form['password'])
-        user = User(0, request.form['username'], request.form['password'])
-        logged_user = ModelUser.login(db, user)
-        if logged_user != None:
-            if logged_user.password:
-                login_user(logged_user)
-                return redirect(url_for('home'))
-            else:
-                flash("Invalid password...")
-                return render_template('auth/login.html')
-        else:
-            flash("User not found...")
-            return render_template('auth/login.html')
-    else:
-        return render_template('auth/login.html')
-    
+# def test_modify_session(client):
+#     with client.session_transaction() as session:
+#         # set a user id without going through the login route
+#         session["admin"] = 1
+
+#     # session is saved now
+
+#     response = client.get("/users/me")
+#     assert response.json["username"] == "flask"
+
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     if request.method == 'POST':
+#         # print(request.form['username'])
+#         # print(request.form['password'])
+#         user = User(0, request.form['username'], request.form['password'])
+#         logged_user = ModelUser.login(db, user)
+#         if logged_user != None:
+#             if logged_user.password:
+#                 login_user(logged_user)
+#                 return redirect(url_for('home'))
+#             else:
+#                 flash("Invalid password...")
+#                 return render_template('auth/login.html')
+#         else:
+#             flash("User not found...")
+#             return render_template('auth/login.html')
+#     else:
+#         return render_template('auth/login.html')
+
 @app.route("/ingresar", methods=['GET', 'POST'])
 def ingresars():
-    if request.method == 'POST':
-        nombref = request.form['nombre']
-        contraseñaf = request.form['contraseña']
-        cursor =con_db.cursor()
-        if nombref and contraseñaf:
-        
-            sql="""SELECT correo 
-             FROM registros
-            WHERE nombre AND contraseña ='{}'"""
-            cursor.execute(sql)
-            row=cursor.fetchone()
-            if row != 0:
-                print(cursor)
-                print()
-                print()
-                return redirect(url_for('admin'))
+	if request.method == 'POST':
+		nombref = request.form['nombre']
+		contraseñaf = request.form['contraseña']
+		cur = con_db.cursor()
+		cur.execute("SELECT * FROM registros WHERE nombre = %s AND contraseña = %s", (nombref, contraseñaf))
+		data = cur.fetchall()
+		print("_-----------------------------------")
+		print(data)
+		if len(data) > 0:
+			print("si hay datos")
+			return redirect(url_for('admin'))
+		else:
+			flash("Datos no encontrados")
+			return redirect(url_for('ingreso'))
+        #  if (admin==1):
+        #      flash("ingresa")
+        #      print(sql)
+        #      return redirect(url_for('agregaratractivos'))
+         
+        #  if nombref and contraseñaf:
+        #     FROM registros
+        #      	sql="""SELECT correo 
+        #      		WHERE nombre AND contraseña ='{}'"""
+        #      	cursor.execute(sql)
+        #      	row=cursor.fetchone()
+        #      if row != 0:
+        #          print(cursor)
+        #          print()
+        #          print()
+        #          return redirect(url_for('admin'))
             
-            else:
-             return "error, los datos ingresados no son válidos"
-        else:
-    	    return "error en la consulta"
+#              return "error, los datos ingresados no son válidos"
+#             else:
+#         else:
+#     	    return "error en la consulta"
 
 @app.route("/guardar_atractivo", methods=['POST'])
 def guardar_atractivos():
 	if request.method == 'POST':
 		nombre = request.form['nombre']
-		descripcion = request.form['descripcion']
 		municipio = request.form['municipio']
+		descripcion = request.form['descripcion']
 		# create_table()
 		cur = con_db.cursor()
-		cur.execute("INSERT INTO atractivos (nombre, descripcion, municipio) VALUES (%s, %s, %s)", (nombre, descripcion, municipio))
+		cur.execute("INSERT INTO atractivos (nombre, municipio, descripcion) VALUES (%s, %s, %s)", (nombre, municipio, descripcion))
 		con_db.commit()
 		flash("Solicitud enviada con éxito atractivos")
 		return redirect(url_for('agregaratractivos'))
+	
 
 @app.route("/guardar_peticion", methods=['POST'])
 def guardar_peticiones():
@@ -132,10 +167,11 @@ def guardar_peticiones():
 		nombre = request.form['nombre']
 		apellido = request.form['apellido']
 		edad = request.form['edad']
+		correo = request.form['correo']
 		peticion=request.form['peticion']
 		# create_table()
 		cur = con_db.cursor()
-		cur.execute("INSERT INTO personas (nombre, apellido, edad, peticion) VALUES (%s, %s, %s,%s)", (nombre, apellido, edad, peticion))
+		cur.execute("INSERT INTO peticion (nombre, apellido, edad, peticion,correo) VALUES (%s, %s, %s,%s,%s)", (nombre, apellido, edad, peticion,correo))
 		con_db.commit()
 		flash("Solicitud enviada con éxito")
 		return redirect(url_for('contacto'))
@@ -194,4 +230,4 @@ con_db.commit()
 
 
 if __name__ == '__main__':
-	app.run(debug=True, port=8000)
+	app.run(debug=True, port=8080)

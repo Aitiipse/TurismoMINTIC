@@ -11,31 +11,33 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
         <link href="../static/css/styles.css" rel="stylesheet" />
+        <link href="../static/css/index.css" rel="stylesheet" />
+        
     </head>
     <body id="page-top">
         <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
             <div class="container">
-                <a class="navbar-small" href="#page-top">HUILA, PARAISO POR CONOCER</a>
+                <a class="navbar-small" href="./#page-top">HUILA, PARAISO POR CONOCER</a>
                 <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menú
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#portfolio">DESTINOS</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#about">HISTORIA</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">ACERCA DE NOSOTROS</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="./#portfolio">DESTINOS</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="./#about">HISTORIA</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="./#contact">ACERCA DE NOSOTROS</a></li>
                         <div class="dropdown">
-                            <div class="  px-0" id="dropdownMenuButton" >
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              INGRESO
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" href="./registro">Registrarse</a>
-                              <a class="dropdown-item" href="./ingreso">Ingresar</a>
-                            </ul>
-                          </div>
+                          <div class="  px-0" id="dropdownMenuButton" >
+                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            INGRESO
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="./registro">Registrarse</a>
+                            <a class="dropdown-item" href="./ingreso">Ingresar</a>
+                          </ul>
                         </div>
+                      </div>
                     </ul>
                 </div>
             </div>
@@ -64,7 +66,38 @@
                 <div class="row justify-content-center">
                     {% for atractivo in atractivos%}
                    
-                    <div class="col-md-6 col-lg-4 mb-5">
+                    <div class="card">
+                        <!-- <ul class="ul">
+                            <li>
+                                <i class="bx bx-drink"></i>
+                            </li>
+                            <li>
+                                <i class="bx bx-film"></i>
+                            </li>
+                            <li>
+                                <i class="bx bx-store-alt"></i>
+                            </li>
+                            <li>
+                                <i class="bx bx-map"></i>
+                            </li>
+                        </ul> -->
+                
+                             
+                        <img src="/src/static/img/Mirador2.jpg" alt="">
+                        <div class="con-text">
+                            <h6>
+                                {{atractivo[1]}}  Ubicado en el municipio de {{atractivo[2]}}
+                            </h6>
+                            <p>
+                                {{atractivo[3]}} <br><br>
+                            <!-- <button>
+                                ver mas
+                            </button> -->
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- <div class="col-md-6 col-lg-4 mb-5">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal1">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -73,7 +106,7 @@
                             <p class="mb-4">{{atractivo[2]}}</p>
                             <p class="mb-4">Ubicado en el municipio de {{atractivo[3]}}</p>
                         </div>
-                    </div>
+                    </div> -->
                     {% endfor %}
                     <!-- <div class="col-md-6 col-lg-4 mb-5">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal2">
@@ -157,9 +190,9 @@
                     
                     <div class="col-lg-4 mb-5 mb-lg-0">
                         <h4 class="text-uppercase mb-4">REDES</h4>
-                        <a class="btn btn-outline-light btn-social mx-1" href="https://www.facebook.com/groups/3181898322099386"><i class="fab fa-fw fa-facebook-f"></i></a>
-                        <a class="btn btn-outline-light btn-social mx-1" href="https://twitter.com/Ministerio_TIC?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"><i class="fab fa-fw fa-twitter"></i></a>
-                        <a class="btn btn-outline-light btn-social mx-1" href="https://co.linkedin.com/in/misi%C3%B3n-tic-63034a208?trk=public_profile_browsemap"><i class="fab fa-fw fa-linkedin-in"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://www.facebook.com/groups/3181898322099386" target="_blank"><i class="fab fa-fw fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://twitter.com/Ministerio_TIC?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor" target="_blank"><i class="fab fa-fw fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://co.linkedin.com/in/misi%C3%B3n-tic-63034a208?trk=public_profile_browsemap" target="_blank"><i class="fab fa-fw fa-linkedin-in"></i></a>
                         <a class="btn btn-outline-light btn-social mx-1" href="/contacto"><i class="fab fa-fw fa-dribbble"></i></a>
                     </div>
                     
@@ -171,8 +204,8 @@
             </div>
         </footer>
 
-        {% for atractivo in atractivos%}
-        
+        <!-- {% for atractivo in atractivos%}
+       
         <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" aria-labelledby="portfolioModal1" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
@@ -199,7 +232,7 @@
                 </div>
               </div>
         </div>
-        {% endfor %}
+        {% endfor %} -->
         <!-- <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" aria-labelledby="portfolioModal2" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
