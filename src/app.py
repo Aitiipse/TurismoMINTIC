@@ -33,10 +33,15 @@ def contacto():
     print("este es el contacto")
     return render_template('contacto.html',integrantes=integrantesRegistrados)
 
+
 @app.route("/atractivos")
-def atractivos():
-	print("Llegamos a atractivos")
-	return render_template("atractivos.html")
+def atractivo():
+    cursor=con_db.cursor()
+    sql= "SELECT*FROM atractivos"
+    cursor.execute(sql)
+    atractivosRegistradas=cursor.fetchall()
+    print("inicio de la página")
+    return render_template('atractivos.html',atractivos=atractivosRegistradas)
 
 @app.route("/ingreso")
 def ingreso():
